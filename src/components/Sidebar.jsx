@@ -4,8 +4,8 @@ const Sidebar = () => {
   return (
     <div className="w-64 bg-gray-800 text-white h-screen">
       <div className="p-4">
-        <h2 className="text-2xl font-bold">Menu</h2>
-        <ul>
+        <h2 className="text-sm mt-20">Menu</h2>
+        <ul className='text-xl font-bold'>
           <li>
             <Link to="/dashboard" className="block py-2 px-4 hover:bg-gray-700">Dashboard</Link>
           </li>
