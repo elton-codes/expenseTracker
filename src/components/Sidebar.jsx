@@ -12,6 +12,12 @@ const Sidebar = () => {
           <li>
             <Link to="/expenses" className="block py-2 px-4 hover:bg-gray-700">Expenses</Link>
           </li>
+          <li>
+            <Link to="/categories" className="block py-2 px-4 hover:bg-gray-700">Categories</Link>
+          </li>
+          <li>
+            <Link to="/budgets" className="block py-2 px-4 hover:bg-gray-700">Budgets</Link>
+          </li>
           {/* I will add more here */}
         </ul>
       </div>

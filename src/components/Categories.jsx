@@ -1,19 +1,31 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const Categories = () => {
-    const [categories, setCategories] = useState([]);
-    const [newCategory, setNewCategory] = useState('');
-  
-    const handleAddCategory = () => {
-      if (newCategory.trim() !== '') {
-        setCategories([...categories, newCategory.trim()]);
-        setNewCategory('');
-      }
-    };
-  
-    const handleDeleteCategory = (category) => {
-      setCategories(categories.filter((cat) => cat !== category));
-    };
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    // Load categories from local storage when the component mounts
+    const storedCategories = JSON.parse(localStorage.getItem('categories')) || [];
+    setCategories(storedCategories);
+  }, []);
+
+  useEffect(() => {
+    // Save categories to local storage whenever they change
+    localStorage.setItem('categories', JSON.stringify(categories));
+  }, [categories]);
+
+  const [newCategory, setNewCategory] = useState('');
+
+  const handleAddCategory = () => {
+    if (newCategory.trim() !== '') {
+      setCategories([...categories, newCategory.trim()]);
+      setNewCategory('');
+    }
+  };
+
+  const handleDeleteCategory = (category) => {
+    setCategories(categories.filter((cat) => cat !== category));
+  };
 
   return (
     <div>
@@ -47,7 +59,7 @@ const Categories = () => {
         ))}
       </ul>
     </div>
-  )
-}
+  );
+};
 
-export default Categories
+export default Categories;

@@ -6,6 +6,8 @@ import SignUp from './pages/auth/SignUp';
 import Dashboard from './components/Dashboard';
 import Expenses from './components/Expenses';
 import ProtectedLayout from './components/ProtectedLayout';
+import Categories from './components/Categories';
+import Budgets from './components/Budgets';
 
 
 function App() {
@@ -21,7 +23,7 @@ function App() {
       element: <Login />,
     },
     {
-      path: "/signup",
+      path: "signup",
       element: <SignUp />,
     },
     {
@@ -29,12 +31,20 @@ function App() {
       element: <ProtectedLayout />,
       children: [
         {
-          path: "/dashboard",
+          path: "dashboard",
           element: <Dashboard />,
         },
         {
-          path: "/expenses",
+          path: "expenses",
           element: <Expenses />,
+        },
+        {
+          path: "categories",
+          element: <Categories />,
+        },
+        {
+          path: "budgets",
+          element: <Budgets />
         }
       ]
     },
