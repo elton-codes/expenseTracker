@@ -1,7 +1,15 @@
+import { useState } from 'react';
 import { formatCurrency } from "../currencyUtils";
 
 const Overview = () => {
-
+  // State to hold overview data
+  const [totalExpenses, setTotalExpenses] = useState(0.00);
+  const [remainingBudget, setRemainingBudget] = useState(0.00);
+  const [expenses, setExpenses] = useState({
+    food: 0.00,
+    transportation: 0.00,
+  });
+  const [budgetVsSpending, setBudgetVsSpending] = useState(0.00);
 
   return (
     <div className="p-6 bg-white rounded-lg shadow-md">
@@ -11,21 +19,21 @@ const Overview = () => {
         {/* Total Expenses */}
         <div className="p-4 bg-blue-50 rounded-lg shadow-sm">
           <h3 className="text-lg font-bold">Total Expenses</h3>
-          <p className="text-2xl font-semibold">$0.00</p> 
+          <p className="text-2xl font-semibold">{formatCurrency(totalExpenses)}</p>
         </div>
 
         {/* Remaining Budget */}
         <div className="p-4 bg-green-50 rounded-lg shadow-sm">
           <h3 className="text-lg font-bold">Remaining Budget</h3>
-          <p className="text-2xl font-semibold">$0.00</p> 
+          <p className="text-2xl font-semibold">{formatCurrency(remainingBudget)}</p>
         </div>
 
         {/* Expense Breakdown */}
         <div className="p-4 bg-yellow-50 rounded-lg shadow-sm">
           <h3 className="text-lg font-bold">Expense Breakdown</h3>
           <ul>
-            <li>Food: $0.00</li> 
-            <li>Transportation: $0.00</li> 
+            <li>Food: {formatCurrency(expenses.food)}</li>
+            <li>Transportation: {formatCurrency(expenses.transportation)}</li>
             {/* Add more categories as needed */}
           </ul>
         </div>
@@ -33,7 +41,7 @@ const Overview = () => {
         {/* Budget vs. Spending */}
         <div className="p-4 bg-red-50 rounded-lg shadow-sm">
           <h3 className="text-lg font-bold">Budget vs. Spending</h3>
-          <p className="text-2xl font-semibold">$0.00</p> 
+          <p className="text-2xl font-semibold">{formatCurrency(budgetVsSpending)}</p>
         </div>
       </div>
     </div>

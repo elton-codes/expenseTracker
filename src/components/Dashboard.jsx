@@ -1,13 +1,19 @@
-import { Link } from 'react-router-dom';
-import DashboardOverview from './DashboardOverview';
-import Overview from './Overview';
+import React from "react";
+import Expenses from "./Expenses";
+import Analytics from "./Analytics";
 
 const Dashboard = () => {
-  return (
-    <div className="p-6"> 
-      <Overview />
-    </div>
-  )
-}
+  const [expenses, setExpenses] = React.useState(() => {
+    const savedExpenses = localStorage.getItem("expenses");
+    return savedExpenses ? JSON.parse(savedExpenses) : [];
+  });
 
-export default Dashboard
+  return (
+    <div>
+      <Expenses expenses={expenses} setExpenses={setExpenses} />
+      <Analytics expenses={expenses} />
+    </div>
+  );
+};
+
+export default Dashboard;
