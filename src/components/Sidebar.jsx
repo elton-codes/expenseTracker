@@ -1,28 +1,69 @@
-import { Link } from 'react-router-dom';
+import { NavLink } from "react-router-dom";
+import { Home, BarChart, Folder, Bell, ClipboardList, LogOut } from "lucide-react";
 
 const Sidebar = () => {
   return (
-    <div className="w-64 bg-gray-800 text-white h-screen">
-      <div className="p-4">
-        <h2 className="text-sm mt-20">Menu</h2>
-        <ul className='text-xl font-bold'>
-          <li>
-            <Link to="/dashboard" className="block py-2 px-4 hover:bg-gray-700">Dashboard</Link>
-          </li>
-          <li>
-            <Link to="/expenses" className="block py-2 px-4 hover:bg-gray-700">Expenses</Link>
-          </li>
-          <li>
-            <Link to="/categories" className="block py-2 px-4 hover:bg-gray-700">Categories</Link>
-          </li>
-          <li>
-            <Link to="/budgets" className="block py-2 px-4 hover:bg-gray-700">Budgets</Link>
-          </li>
-          {/* I will add more here */}
-        </ul>
+    <aside className="bg-[#1F1572] text-white w-64 min-h-screen p-4 pt-40">
+      <nav>
+        <NavLink
+          to="/dashboard"
+          className={({ isActive }) =>
+            isActive ? "bg-blue-500 flex items-center p-2 rounded-md" : "flex items-center p-2 rounded-md"
+          }
+        >
+          <Home className="w-5 h-5 mr-2" />
+          Dashboard
+        </NavLink>
+        <NavLink
+          to="/expenses"
+          className={({ isActive }) =>
+            isActive ? "bg-blue-500 flex items-center p-2 rounded-md" : "flex items-center p-2 rounded-md mt-4"
+          }
+        >
+          <BarChart className="w-5 h-5 mr-2" />
+          Expenses
+        </NavLink>
+        <NavLink
+          to="/categories"
+          className={({ isActive }) =>
+            isActive ? "bg-blue-500 flex items-center p-2 rounded-md" : "flex items-center p-2 rounded-md mt-4"
+          }
+        >
+          <Folder className="w-5 h-5 mr-2" />
+          Categories
+        </NavLink>
+        <NavLink
+          to="/notifications"
+          className={({ isActive }) =>
+            isActive ? "bg-blue-500 flex items-center p-2 rounded-md" : "flex items-center p-2 rounded-md mt-4"
+          }
+        >
+          <Bell className="w-5 h-5 mr-2" />
+          Notifications
+        </NavLink>
+        <NavLink
+          to="/budgets"
+          className={({ isActive }) =>
+            isActive ? "bg-blue-500 flex items-center p-2 rounded-md" : "flex items-center p-2 rounded-md mt-4"
+          }
+        >
+          <ClipboardList className="w-5 h-5 mr-2" />
+          Budgets
+        </NavLink>
+      </nav>
+      <div className="mt-16">
+        <NavLink
+          to="/logout"
+          className={({ isActive }) =>
+            isActive ? "bg-red-500 flex items-center p-2 rounded-md" : "flex items-center p-2 rounded-md"
+          }
+        >
+          <LogOut className="w-5 h-5 mr-2"/>
+          Logout
+        </NavLink>
       </div>
-    </div>
-  )
-}
+    </aside>
+  );
+};
 
-export default Sidebar
+export default Sidebar;

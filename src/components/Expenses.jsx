@@ -1,93 +1,189 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 const Expenses = () => {
-  const [expenses, setExpenses] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
-  useEffect(() => {
-    // Load expenses from local storage when the component mounts
-    const storedExpenses = JSON.parse(localStorage.getItem('expenses')) || [];
-    setExpenses(storedExpenses);
-  }, []);
-
-  useEffect(() => {
-    // Save expenses to local storage whenever they change
-    localStorage.setItem('expenses', JSON.stringify(expenses));
-  }, [expenses]);
-
-  const [newExpense, setNewExpense] = useState({
-    description: '',
-    amount: '',
-    category: '',
+  // Load expenses from localStorage or initialize with default values
+  const [expenses, setExpenses] = useState(() => {
+    const savedExpenses = localStorage.getItem("expenses");
+    return savedExpenses ? JSON.parse(savedExpenses) : [
+      { id: 1, date: "2024-08-13", category: "Food", description: "food", amount: 100 },
+      { id: 2, date: "2024-08-13", category: "Entertainment", description: "phone", amount: 200 },
+      // Add more initial expenses here if needed
+    ];
   });
 
-  const handleAddExpense = () => {
-    if (
-      newExpense.description.trim() !== '' &&
-      newExpense.amount.trim() !== '' &&
-      newExpense.category.trim() !== ''
-    ) {
-      setExpenses([...expenses, { ...newExpense, id: Date.now() }]);
-      setNewExpense({ description: '', amount: '', category: '' });
+  // State for new expense inputs
+  const [newAmount, setNewAmount] = useState("");
+  const [newDescription, setNewDescription] = useState("");
+  const [newCategory, setNewCategory] = useState("");
+  const [newDate, setNewDate] = useState("");
+
+  // State for editing an expense
+  const [editMode, setEditMode] = useState(false);
+  const [editId, setEditId] = useState(null);
+
+  // Filter expenses based on the selected category
+  const filteredExpenses = selectedCategory === "All"
+    ? expenses
+    : expenses.filter(expense => expense.category === selectedCategory);
+
+  // Calculate total expenses
+  const totalExpenses = filteredExpenses.reduce((total, expense) => total + expense.amount, 0);
+
+  // Save expenses to localStorage whenever expenses state changes
+  useEffect(() => {
+    localStorage.setItem("expenses", JSON.stringify(expenses));
+  }, [expenses]);
+
+  // Handle form submission
+  const handleAddExpense = (e) => {
+    e.preventDefault();
+
+    if (editMode) {
+      // Edit existing expense
+      const updatedExpenses = expenses.map(expense => 
+        expense.id === editId 
+          ? { ...expense, date: newDate, category: newCategory, description: newDescription, amount: parseFloat(newAmount) } 
+          : expense
+      );
+      setExpenses(updatedExpenses);
+      setEditMode(false);
+      setEditId(null);
+    } else {
+      // Add new expense
+      const newExpense = {
+        id: expenses.length + 1, // Simple ID generation
+        date: newDate,
+        category: newCategory,
+        description: newDescription,
+        amount: parseFloat(newAmount),
+      };
+      setExpenses([...expenses, newExpense]);
     }
+
+    // Clear form fields
+    setNewAmount("");
+    setNewDescription("");
+    setNewCategory("");
+    setNewDate("");
   };
 
-  const handleDeleteExpense = (id) => {
-    setExpenses(expenses.filter((expense) => expense.id !== id));
+  // Handle edit button click
+  const handleEditClick = (expense) => {
+    setEditMode(true);
+    setEditId(expense.id);
+    setNewAmount(expense.amount);
+    setNewDescription(expense.description);
+    setNewCategory(expense.category);
+    setNewDate(expense.date);
+  };
+
+  // Handle delete button click
+  const handleDeleteClick = (id) => {
+    const updatedExpenses = expenses.filter(expense => expense.id !== id);
+    setExpenses(updatedExpenses);
   };
 
   return (
-    <div>
-      <h2 className="text-2xl font-bold mb-4">Expenses</h2>
-      <div className="mb-4">
-        <input
-          type="text"
-          value={newExpense.description}
-          onChange={(e) =>
-            setNewExpense({ ...newExpense, description: e.target.value })
-          }
-          placeholder="Description"
-          className="p-2 border rounded mr-2"
-        />
-        <input
-          type="text"
-          value={newExpense.amount}
-          onChange={(e) =>
-            setNewExpense({ ...newExpense, amount: e.target.value })
-          }
-          placeholder="Amount"
-          className="p-2 border rounded mr-2"
-        />
-        <input
-          type="text"
-          value={newExpense.category}
-          onChange={(e) =>
-            setNewExpense({ ...newExpense, category: e.target.value })
-          }
-          placeholder="Category"
-          className="p-2 border rounded"
-        />
-        <button
-          onClick={handleAddExpense}
-          className="ml-2 bg-blue-500 text-white px-4 py-2 rounded"
-        >
-          Add
-        </button>
+    <div className="flex">
+      <div className="flex-1">
+        <h2 className="text-xl font-bold">Manage Expenses</h2>
+
+        {/* Form for adding/editing expenses */}
+        <form className="mb-4" onSubmit={handleAddExpense}>
+          <input
+            type="number"
+            placeholder="Amount"
+            value={newAmount}
+            onChange={(e) => setNewAmount(e.target.value)}
+            className="mb-2 p-2 border rounded w-full"
+            required
+          />
+          <input
+            type="text"
+            placeholder="Description"
+            value={newDescription}
+            onChange={(e) => setNewDescription(e.target.value)}
+            className="mb-2 p-2 border rounded w-full"
+            required
+          />
+          <input
+            type="date"
+            value={newDate}
+            onChange={(e) => setNewDate(e.target.value)}
+            className="mb-2 p-2 border rounded w-full"
+            required
+          />
+          <select
+            value={newCategory}
+            onChange={(e) => setNewCategory(e.target.value)}
+            className="mb-2 p-2 border rounded w-full"
+            required
+          >
+            <option value="">Select Category</option>
+            <option value="Food">Food</option>
+            <option value="Transportation">Transportation</option>
+            <option value="Utilities">Utilities</option>
+            <option value="Entertainment">Entertainment</option>
+            <option value="Miscellaneous">Miscellaneous</option>
+          </select>
+          <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded">
+            {editMode ? "Update Expense" : "Add Expense"}
+          </button>
+        </form>
+
+        <div className="mb-4">
+          <h3 className="text-lg font-semibold">Total Expenses: GHC {totalExpenses.toFixed(2)}</h3>
+        </div>
+
+        <div className="mb-4">
+          <h3 className="text-lg font-semibold">Expenses</h3>
+          {filteredExpenses.map(expense => (
+            <div key={expense.id} className="p-2 bg-gray-100 rounded mb-2 flex justify-between items-center">
+              <div>
+                <span>{expense.date} </span>
+                <span>{expense.category} </span>
+                <span>{expense.description} </span>
+                <span>{expense.amount}</span>
+              </div>
+              <div>
+                <button 
+                  onClick={() => handleEditClick(expense)} 
+                  className="text-blue-500 mr-2"
+                >
+                  Edit
+                </button>
+                <button 
+                  onClick={() => handleDeleteClick(expense.id)} 
+                  className="text-red-500"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
-      <ul>
-        {expenses.map((expense) => (
-          <li key={expense.id} className="flex justify-between items-center">
-            <span>
-              {expense.description} - ${expense.amount} ({expense.category})
-            </span>
-            <button
-              onClick={() => handleDeleteExpense(expense.id)}
-              className="text-red-500"
-            >
-              Delete
-            </button>
-          </li>
-        ))}
-      </ul>
+
+      {/* Right Sidebar with Categories */}
+      <div className="w-64 bg-gray-200 p-4 rounded ml-4">
+        <h3 className="text-lg font-semibold">Categories</h3>
+        <ul>
+          {["All", "Food", "Transportation", "Utilities", "Entertainment", "Miscellaneous"].map(category => (
+            <li key={category}>
+              <button
+                onClick={() => setSelectedCategory(category)}
+                className={`block w-full text-left py-2 px-4 rounded ${
+                  selectedCategory === category ? "bg-blue-500 text-white" : "bg-white text-gray-800"
+                }`}
+              >
+                {category}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };

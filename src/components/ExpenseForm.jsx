@@ -1,65 +1,87 @@
 import { useState } from 'react';
 
-const ExpenseForm = ({ onSave, expense }) => {
-  const [date, setDate] = useState(expense ? expense.date : '');
-  const [amount, setAmount] = useState(expense ? expense.amount : '');
-  const [category, setCategory] = useState(expense ? expense.category : '');
-  const [notes, setNotes] = useState(expense ? expense.notes : '');
+const ExpenseForm = ({ onSubmit, categories }) => {
+  const [formData, setFormData] = useState({
+    amount: '',
+    date: '',
+    description: '',
+    category: '',
+    receipt: null,
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleFileChange = (e) => {
+    setFormData({ ...formData, receipt: e.target.files[0] });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSave({ date, amount, category, notes });
-    setDate('');
-    setAmount('');
-    setCategory('');
-    setNotes('');
+    onSubmit(formData);
+    setFormData({
+      amount: '',
+      date: '',
+      description: '',
+      category: '',
+      receipt: null,
+    });
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-semibold mb-4">{expense ? 'Edit Expense' : 'Add Expense'}</h2>
-      
-      <div className="mb-4">
-        <label className="block text-gray-700">Date</label>
-        <input
-          type="date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-          className="w-full p-2 border rounded"
-        />
-      </div>
-
-      <div className="mb-4">
-        <label className="block text-gray-700">Amount</label>
+    <form onSubmit={handleSubmit}>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <input
           type="number"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-          className="w-full p-2 border rounded"
+          name="amount"
+          value={formData.amount}
+          onChange={handleChange}
+          placeholder="Amount"
+          className="p-2 border rounded"
+          required
         />
-      </div>
-
-      <div className="mb-4">
-        <label className="block text-gray-700">Category</label>
+        <input
+          type="date"
+          name="date"
+          value={formData.date}
+          onChange={handleChange}
+          className="p-2 border rounded"
+          required
+        />
         <input
           type="text"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          className="w-full p-2 border rounded"
+          name="description"
+          value={formData.description}
+          onChange={handleChange}
+          placeholder="Description"
+          className="p-2 border rounded"
+          required
+        />
+        <select
+          name="category"
+          value={formData.category}
+          onChange={handleChange}
+          className="p-2 border rounded"
+          required
+        >
+          <option value="">Select Category</option>
+          {categories.map((category, index) => (
+            <option key={index} value={category}>
+              {category}
+            </option>
+          ))}
+        </select>
+        <input
+          type="file"
+          name="receipt"
+          onChange={handleFileChange}
+          className="p-2 border rounded"
         />
       </div>
-
-      <div className="mb-4">
-        <label className="block text-gray-700">Notes</label>
-        <textarea
-          value={notes}
-          onChange={(e) => setNotes(e.target.value)}
-          className="w-full p-2 border rounded"
-        />
-      </div>
-
-      <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700">
-        {expense ? 'Update Expense' : 'Add Expense'}
+      <button type="submit" className="mt-4 px-4 py-2 bg-blue-500 text-white rounded">
+        Add Expense
       </button>
     </form>
   );
