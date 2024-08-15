@@ -1,9 +1,22 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { Home, BarChart, Folder, Bell, ClipboardList, LogOut } from "lucide-react";
 
+
 const Sidebar = () => {
+  const navigate = useNavigate ()
+
+  const logout = async () => {
+    try {
+      await apiLogout();
+      toast.success("Logged out successfully");
+      navigate("/login");
+    } catch (error) {
+      toast.error("An error occured");
+    }
+  };
+
   return (
-    <aside className="bg-[#1F1572] text-white w-64 min-h-screen p-4 pt-40">
+    <aside className="bg-[#1F1572] text-white w-64 min-h-screen p-4 pt-40 rounded">
       <nav>
         <NavLink
           to="/dashboard"
@@ -53,7 +66,7 @@ const Sidebar = () => {
       </nav>
       <div className="mt-16">
         <NavLink
-          to="/logout"
+          onClick={logout}
           className={({ isActive }) =>
             isActive ? "bg-red-500 flex items-center p-2 rounded-md" : "flex items-center p-2 rounded-md"
           }

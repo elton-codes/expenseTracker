@@ -8,6 +8,9 @@ import Expenses from './components/Expenses';
 import ProtectedLayout from './components/ProtectedLayout';
 import Categories from './components/Categories';
 import Budgets from './components/Budgets';
+import { ExpensesProvider } from './context/ExpensesContext';
+import Notifications from './components/Notifications';
+import { CategoriesProvider } from './context/CategoriesContext';
 
 
 function App() {
@@ -28,7 +31,13 @@ function App() {
     },
     {
       path: "/",
-      element: <ProtectedLayout />,
+      element: (
+        <ExpensesProvider>
+          <CategoriesProvider>
+      <ProtectedLayout />,
+      </CategoriesProvider>
+      </ExpensesProvider>
+    ),
       children: [
         {
           path: "dashboard",
@@ -45,6 +54,10 @@ function App() {
         {
           path: "budgets",
           element: <Budgets />
+        },
+        {
+          path: "notifications",
+          element: <Notifications />
         }
       ]
     },

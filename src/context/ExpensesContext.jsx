@@ -1,0 +1,14 @@
+// src/context/ExpensesContext.jsx or ExpensesContext.js
+import React, { createContext, useState } from 'react';
+
+export const ExpensesContext = createContext();
+
+export const ExpensesProvider = ({ children }) => {
+  const [expenses, setExpenses] = useState([]);
+
+  return (
+    <ExpensesContext.Provider value={{ expenses, setExpenses }}>
+      {children}
+    </ExpensesContext.Provider>
+  );
+};
