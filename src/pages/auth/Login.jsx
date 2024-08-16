@@ -4,6 +4,7 @@ import { useState } from "react"
 import { toast } from "react-toastify"
 import { Eye, EyeOff } from 'lucide-react';
 import Loader from "../../components/Loader";
+import { apiLogin } from "../../services/auth";
 
 const Login = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -91,7 +92,7 @@ const Login = () => {
             type="submit"
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline text-lg"
           >
-           <Link to="/dashboard">{isSubmitting ? <Loader /> : "Login"}</Link> 
+           {isSubmitting ? <Loader /> : "Login"}
           </button>
         </div>
 

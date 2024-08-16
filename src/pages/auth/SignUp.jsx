@@ -1,16 +1,13 @@
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "react-toastify";
 import { Eye, EyeOff } from 'lucide-react';
-import { debounce } from "lodash";
 import { apiSignUp } from "../../services/auth";
 
 const SignUp = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
-    const [usernameAvailable, setUsernameAvailable] = useState(false);
-    const [isUsernameLoading, setIsUsernameLoading] = useState(false);
     const navigate = useNavigate();
 
     const {
@@ -20,42 +17,6 @@ const SignUp = () => {
         formState: { errors },
       } = useForm();
     
-      const checkUserName = async (userName) => {
-        setIsUsernameLoading(true);
-        try {
-            const res = await apiCheckUsernameExists(userName);
-            console.log(res.data);
-            const user = res.data.user;
-            if (user) {
-              setUsernameNotAvailable(true);
-              setUsernameAvailable(false);
-            } else {
-              setUsernameAvailable(true);
-              setUsernameNotAvailable(false);
-            }
-          } catch (error) {
-            console.log(error);
-            toast.error("An error occured!");
-          } finally {
-            setIsUsernameLoading(false);
-          }
-        };
-
-        const userNameWatch = watch("userName");
-
-        useEffect(() => {
-            const debouncedSearch = debounce(async () => {
-              if (userNameWatch) {
-                await checkUserName(userNameWatch);
-              }
-            }, 1000);
-        
-            debouncedSearch();
-
-            return () => {
-                debouncedSearch.cancel();
-              };
-            }, [userNameWatch]);
 
       const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);
@@ -65,22 +26,20 @@ const SignUp = () => {
         console.log(data);
         setIsSubmitting(true);
         let payload = {
-            firstName: data.firstName,
-            lastName: data.lastName,
-            userName: data.userName,
+            // firstName: data.firstName,
+            // lastName: data.lastName,
+            username: data.username,
             password: data.password,
-            email: data.email,
-            confirmedPassword: data.password,
+            email: data.email
         }
 
         try {
           const res = await apiSignUp(payload);
           console.log(res.data)
-          toast.success(res.data);
+          toast.success(res.data.message);
 
-          setTimeout(() => {
             navigate("/login");
-          }, 3000)
+        
         } catch (error) {
           console.log(error);
           toast.error("An error occurred!");
@@ -93,6 +52,19 @@ const SignUp = () => {
     <div className="flex flex-col items-center justify-center h-screen bg-gray-100">
       <h1 className="text-3xl font-bold mb-4">Sign Up</h1>
       <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-md bg-white p-10 rounded shadow-md">
+      {/* <div className="mb-6">
+          <label className="block text-gray-700 text-lg font-bold mb-2" htmlFor="username">
+            First Name
+          </label>
+          <input
+            id="firstname"
+            type="text"
+            placeholder="firstname"
+            className="shadow appearance-none border rounded w-full py-3 px-3 text-gray-700 text-lg leading-tight focus:outline-none focus:shadow-outline"
+            {...register("firstname", { required: "First Name is required" })}
+          />
+          {errors.firstname && <p className="text-red-500">{errors.firstname.message}</p>}
+        </div> */}
         <div className="mb-6">
           <label className="block text-gray-700 text-lg font-bold mb-2" htmlFor="username">
             Username
@@ -151,7 +123,7 @@ const SignUp = () => {
             type="submit"
             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline text-lg"
           >
-            Sign Up
+            Sign Up 
           </button>
         </div>
 

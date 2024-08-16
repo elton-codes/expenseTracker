@@ -1,63 +1,89 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
+import { CategoriesContext } from '../context/CategoriesContext'; // Import the CategoriesContext
 
 const Categories = () => {
-  const [categories, setCategories] = useState([]);
-
-  useEffect(() => {
-    // Load categories from local storage when the component mounts
-    const storedCategories = JSON.parse(localStorage.getItem('categories')) || [];
-    setCategories(storedCategories);
-  }, []);
-
-  useEffect(() => {
-    // Save categories to local storage whenever they change
-    localStorage.setItem('categories', JSON.stringify(categories));
-  }, [categories]);
+  // Access categories and setCategories from the context
+  const { categories, setCategories } = useContext(CategoriesContext);
 
   const [newCategory, setNewCategory] = useState('');
+  const [editMode, setEditMode] = useState(false);
+  const [editIndex, setEditIndex] = useState(null);
 
-  const handleAddCategory = () => {
-    if (newCategory.trim() !== '') {
-      setCategories([...categories, newCategory.trim()]);
-      setNewCategory('');
+  // Handle form submission for adding/editing a category
+  const handleAddCategory = (e) => {
+    e.preventDefault();
+
+    if (editMode) {
+      // Edit existing category
+      const updatedCategories = categories.map((category, index) => 
+        index === editIndex ? newCategory : category
+      );
+      setCategories(updatedCategories);
+      setEditMode(false);
+      setEditIndex(null);
+    } else {
+      // Add new category
+      setCategories([...categories, newCategory]);
     }
+
+    // Clear form field
+    setNewCategory('');
   };
 
-  const handleDeleteCategory = (category) => {
-    setCategories(categories.filter((cat) => cat !== category));
+  // Handle edit button click
+  const handleEditClick = (index) => {
+    setEditMode(true);
+    setEditIndex(index);
+    setNewCategory(categories[index]);
+  };
+
+  // Handle delete button click
+  const handleDeleteClick = (index) => {
+    const updatedCategories = categories.filter((_, i) => i !== index);
+    setCategories(updatedCategories);
   };
 
   return (
     <div>
-      <h2 className="text-2xl font-bold mb-4">Categories</h2>
-      <div className="mb-4">
+      <h2 className="text-xl font-bold">Manage Categories</h2>
+
+      {/* Form for adding/editing categories */}
+      <form className="mb-4" onSubmit={handleAddCategory}>
         <input
           type="text"
+          placeholder="Category Name"
           value={newCategory}
           onChange={(e) => setNewCategory(e.target.value)}
-          placeholder="New Category"
-          className="p-2 border rounded"
+          className="mb-2 p-2 border rounded w-full"
+          required
         />
-        <button
-          onClick={handleAddCategory}
-          className="ml-2 bg-blue-500 text-white px-4 py-2 rounded"
-        >
-          Add
+        <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded">
+          {editMode ? 'Update Category' : 'Add Category'}
         </button>
-      </div>
-      <ul>
+      </form>
+
+      <div className="mb-4">
+        <h3 className="text-lg font-semibold">Categories</h3>
         {categories.map((category, index) => (
-          <li key={index} className="flex justify-between items-center">
-            {category}
-            <button
-              onClick={() => handleDeleteCategory(category)}
-              className="text-red-500"
-            >
-              Delete
-            </button>
-          </li>
+          <div key={index} className="p-2 bg-gray-100 rounded mb-2 flex justify-between items-center">
+            <span>{category}</span>
+            <div>
+              <button 
+                onClick={() => handleEditClick(index)} 
+                className="text-blue-500 mr-2"
+              >
+                Edit
+              </button>
+              <button 
+                onClick={() => handleDeleteClick(index)} 
+                className="text-red-500"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 };
