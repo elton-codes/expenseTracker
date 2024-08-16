@@ -2,9 +2,29 @@ import { Link } from 'react-router-dom';
 import { User, UserCheck, Folder, DollarSign, Calendar, Bell, FacebookIcon, Twitter, Instagram, Facebook } from 'lucide-react';
 import FAQ from '../components/FAQ';
 import { heroImg, portraitImg } from '../assets';
+import { useEffect } from 'react';
 
 
 const LandingPage = () => {
+  useEffect(() => {
+    // Inject the chatbot script
+    const script1 = document.createElement("script");
+    script1.innerHTML = `
+      window.embeddedChatbotConfig = {
+        chatbotId: "vfKYvbzoZw5uwPt_NjCUd",
+        domain: "www.chatbase.co"
+      }
+    `;
+    document.body.appendChild(script1);
+
+    const script2 = document.createElement("script");
+    script2.src = "https://www.chatbase.co/embed.min.js";
+    script2.setAttribute("chatbotId", "vfKYvbzoZw5uwPt_NjCUd");
+    script2.setAttribute("domain", "www.chatbase.co");
+    script2.defer = true;
+    document.body.appendChild(script2);
+  }, []);
+
   return (
     <>
       <header className="bg-gray-200 shadow-md sticky top-0 z-50">
@@ -156,6 +176,7 @@ const LandingPage = () => {
                   <Link className="text-yellow"> <Instagram /> </Link>
                 </div>
         </div>
+        
         {/* Footer Links */}
         <div className="grid grid-cols-3 gap-16">
           <div>
