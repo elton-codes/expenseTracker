@@ -40,7 +40,7 @@ const LandingPage = () => {
         </div>
       </section>
 
-      <section id="how-it-works" className="flex items-center justify-between bg-white py-16 px-16">
+      <section id="how-it-works" className="flex items-center gap-4 justify-between bg-white py-16 px-16">
         {/* Benefits Image */}
         <div className="w-1/2">
           <img src={portraitImg} alt="MoneyMap Dashboard" className="rounded-lg shadow-lg" />
