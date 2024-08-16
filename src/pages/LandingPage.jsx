@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
-import { User, UserCheck, Folder, DollarSign, Calendar, Bell } from 'lucide-react';
+import { User, UserCheck, Folder, DollarSign, Calendar, Bell, FacebookIcon, Twitter, Instagram, Facebook } from 'lucide-react';
 import FAQ from '../components/FAQ';
-import { heroImg } from '../assets';
+import { heroImg, portraitImg } from '../assets';
 
 
 const LandingPage = () => {
@@ -21,35 +21,35 @@ const LandingPage = () => {
         </nav>
       </header>
 
-      <section id="home" className="flex items-center justify-between bg-gradient-to-r from-gray-200 to-white h-screen px-16">
+      <section id="home" className="flex items-center justify-between bg-gradient-to-r from-gray-200 to-white h-screen px-28">
         {/* Hero Content */}
         <div className="space-y-6 max-w-lg">
-          <h1 className="text-4xl font-bold">
+          <h1 className="text-5xl font-bold">
             We <span className="text-blue-600">Guarantee</span> <br />
             The Worthiness Of <br /> Every <span className="text-blue-600">Money</span> Transaction.
           </h1>
-          <p className="text-gray-700">Take control of your expenses with MoneyMap. Track your spending, set budgets, and achieve your financial goals all in one place.</p>
-          <div className="space-x-4">
-            <Link to="/login" className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-800">Login</Link>
+          <p className="text-gray-700 text-lg">Take control of your expenses with MoneyMap. Track your spending, set budgets, and achieve your financial goals all in one place.</p>
+          <div className="space-x-4 font-semibold">
+            <Link to="/login" className="bg-blue-600 text-white py-2 px-4 border border-blue-600 rounded-lg hover:bg-blue-800">Login</Link>
             <Link to="/signup" className="bg-white text-blue-600 border border-blue-600 py-2 px-4 rounded-lg hover:bg-blue-600 hover:text-white">Sign Up</Link>
           </div>
         </div>
         {/* Hero Image */}
         <div className="rounded-full overflow-hidden">
-          <img src={heroImg} alt="MoneyMap Web App" className="w-96 h-96 object-cover" />
+          <img src={heroImg} alt="MoneyMap Web App" className="w-full h-full object-cover" />
         </div>
       </section>
 
       <section id="how-it-works" className="flex items-center justify-between bg-white py-16 px-16">
         {/* Benefits Image */}
         <div className="w-1/2">
-          <img src="./portrait.png" alt="MoneyMap Dashboard" className="rounded-lg shadow-lg" />
+          <img src={portraitImg} alt="MoneyMap Dashboard" className="rounded-lg shadow-lg" />
         </div>
         {/* Benefits Content */}
         <div className="w-1/2 space-y-6">
-          <h5 className="text-lg text-gray-600">Benefits</h5>
-          <h2 className="text-3xl font-bold text-blue-600">We Make Money <br /> Work In Your Favor</h2>
-          <p className="text-gray-700">MoneyMap helps you track every penny, create categories, and set budgets. Get notified when you're nearing your limits, so you can stay on top of your expenses and achieve your financial goals.</p>
+          <h5 className="text-lg text-gray-600 font-bold">Benefits</h5>
+          <h2 className="text-4xl font-bold text-blue-600">We Make Money <br /> Work In Your Favor</h2>
+          <p className="text-gray-700 text-base pb-8">MoneyMap helps you track every penny, create categories, and set budgets. <br /> Get notified when you're nearing your limits, so you can stay on top of your expenses and achieve your financial goals.</p>
           <a href="#get-started" className="bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-800">Get Started</a>
         </div>
       </section>
@@ -145,11 +145,16 @@ const LandingPage = () => {
         <div className="max-w-xs">
           <img src="logo.png" alt="MoneyMap Logo" className="mb-4" />
           <p className="text-gray-700">Nullam porta consectetur metus vel facilisis. Aliquam quis molestie massa, ut fringilla odio. Sed blandit quis ante ut feugiat.</p>
-          <div className="flex space-x-4 mt-4">
+          {/* <div className="flex space-x-4 mt-4">
             <a href="#"><img src="facebook-icon.png" alt="Facebook" /></a>
             <a href="#"><img src="twitter-icon.png" alt="Twitter" /></a>
             <a href="#"><img src="instagram-icon.png" alt="Instagram" /></a>
-          </div>
+          </div> */}
+          <div className="flex space-x-4 mt-4">
+                  <Link className="text-yellow"> <Facebook /> </Link>
+                  <Link className="text-yellow"> <Twitter /> </Link>
+                  <Link className="text-yellow"> <Instagram /> </Link>
+                </div>
         </div>
         {/* Footer Links */}
         <div className="grid grid-cols-3 gap-16">

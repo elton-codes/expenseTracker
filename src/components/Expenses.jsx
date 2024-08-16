@@ -9,6 +9,8 @@ const Expenses = () => {
     return savedNotifications ? JSON.parse(savedNotifications) : [];
   });
 
+  const [showForm, setShowForm] = useState(false); // State to control form visibility
+
   const addNotification = (message) => {
     const newNotification = { message };
     const updatedNotifications = [...notifications, newNotification];
@@ -120,6 +122,9 @@ const Expenses = () => {
     setNewDescription("");
     setNewCategory("");
     setNewDate("");
+
+    // Hide form after submission
+    setShowForm(false);
   };
 
   // Handle edit button click
@@ -130,6 +135,7 @@ const Expenses = () => {
     setNewDescription(expense.description);
     setNewCategory(expense.category);
     setNewDate(expense.date);
+    setShowForm(true); // Show form when editing
   };
 
   // Handle delete button click
@@ -156,51 +162,61 @@ const Expenses = () => {
           ))}
         </div>
 
+        {/* Button to toggle form visibility */}
+        <button
+          onClick={() => setShowForm(!showForm)}
+          className="mb-4 bg-green-500 text-white py-2 px-4 rounded"
+        >
+          {showForm ? "Hide Form" : "Add New Expense"}
+        </button>
+
         {/* Form for adding/editing expenses */}
-        <form className="mb-4" onSubmit={handleAddExpense}>
-          <input
-            type="number"
-            placeholder="Amount"
-            value={newAmount}
-            onChange={(e) => setNewAmount(e.target.value)}
-            className="mb-2 p-2 border rounded w-full"
-            required
-          />
-          <input
-            type="text"
-            placeholder="Description"
-            value={newDescription}
-            onChange={(e) => setNewDescription(e.target.value)}
-            className="mb-2 p-2 border rounded w-full"
-            required
-          />
-          <input
-            type="date"
-            value={newDate}
-            onChange={(e) => setNewDate(e.target.value)}
-            className="mb-2 p-2 border rounded w-full"
-            required
-          />
-          <select
-            value={newCategory}
-            onChange={(e) => setNewCategory(e.target.value)}
-            className="mb-2 p-2 border rounded w-full"
-            required
-          >
-            <option value="">Select Category</option>
-            {categories.map((category) => (
-              <option key={category} value={category}>
-                {category}
-              </option>
-            ))}
-          </select>
-          <button
-            type="submit"
-            className="bg-blue-500 text-white py-2 px-4 rounded"
-          >
-            {editMode ? "Update Expense" : "Add Expense"}
-          </button>
-        </form>
+        {showForm && (
+          <form className="mb-4" onSubmit={handleAddExpense}>
+            <input
+              type="number"
+              placeholder="Amount"
+              value={newAmount}
+              onChange={(e) => setNewAmount(e.target.value)}
+              className="mb-2 p-2 border rounded w-full"
+              required
+            />
+            <input
+              type="text"
+              placeholder="Description"
+              value={newDescription}
+              onChange={(e) => setNewDescription(e.target.value)}
+              className="mb-2 p-2 border rounded w-full"
+              required
+            />
+            <input
+              type="date"
+              value={newDate}
+              onChange={(e) => setNewDate(e.target.value)}
+              className="mb-2 p-2 border rounded w-full"
+              required
+            />
+            <select
+              value={newCategory}
+              onChange={(e) => setNewCategory(e.target.value)}
+              className="mb-2 p-2 border rounded w-full"
+              required
+            >
+              <option value="">Select Category</option>
+              {categories.map((category) => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
+            </select>
+            <button
+              type="submit"
+              className="bg-blue-500 text-white py-2 px-4 rounded"
+            >
+              {editMode ? "Update Expense" : "Add Expense"}
+            </button>
+          </form>
+        )}
 
         <div className="mb-4">
           <h3 className="text-lg font-semibold">

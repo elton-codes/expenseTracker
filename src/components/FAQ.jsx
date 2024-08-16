@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { faqImg } from '../assets';
 
 /**
  * The FAQ component provides answers to common questions about MoneyMap.
@@ -14,7 +15,7 @@ const FAQ = () => {
     <section className="flex items-center justify-between bg-gray-100 py-16 px-16">
       {/* FAQ Image */}
       <div className="w-1/2 pr-8">
-        <img src="./faq.jpg" alt="FAQ Image" className="rounded-lg shadow-lg" />
+        <img src={faqImg} alt="FAQ Image" className="rounded-lg shadow-lg" />
       </div>
       {/* FAQ Content */}
       <div className="w-1/2 space-y-6">
