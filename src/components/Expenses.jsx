@@ -165,7 +165,7 @@ const Expenses = () => {
         {/* Button to toggle form visibility */}
         <button
           onClick={() => setShowForm(!showForm)}
-          className="mb-4 bg-green-500 text-white py-2 px-4 rounded"
+          className="mb-4 bg-blue-500 text-white py-2 px-4 rounded"
         >
           {showForm ? "Hide Form" : "Add New Expense"}
         </button>

@@ -1,5 +1,4 @@
-
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Login from './pages/auth/Login';
 import LandingPage from './pages/LandingPage';
 import SignUp from './pages/auth/SignUp';
@@ -8,18 +7,16 @@ import Expenses from './components/Expenses';
 import ProtectedLayout from './components/ProtectedLayout';
 import Categories from './components/Categories';
 import Budgets from './components/Budgets';
+import Settings from './components/Settings';
 import { ExpensesProvider } from './context/ExpensesContext';
-import Notifications from './components/Notifications';
 import { CategoriesProvider } from './context/CategoriesContext';
-
+import { BudgetsProvider } from './context/BudgetsContext'; // Import BudgetsProvider
 
 function App() {
   const router = createBrowserRouter([
-    
     {
       path: "/",
       element: <LandingPage />,
-      
     },
     {
       path: "login",
@@ -34,10 +31,12 @@ function App() {
       element: (
         <ExpensesProvider>
           <CategoriesProvider>
-      <ProtectedLayout />,
-      </CategoriesProvider>
-      </ExpensesProvider>
-    ),
+            <BudgetsProvider> {/* Wrap everything with BudgetsProvider */}
+              <ProtectedLayout />
+            </BudgetsProvider>
+          </CategoriesProvider>
+        </ExpensesProvider>
+      ),
       children: [
         {
           path: "dashboard",
@@ -53,20 +52,17 @@ function App() {
         },
         {
           path: "budgets",
-          element: <Budgets />
+          element: <Budgets />,
         },
         {
-          path: "notifications",
-          element: <Notifications />
-        }
-      ]
+          path: "settings",
+          element: <Settings />,
+        },
+      ],
     },
-    
   ]);
 
-  return (
-    <RouterProvider router={router} />
-  )
+  return <RouterProvider router={router} />;
 }
 
-export default App
+export default App;

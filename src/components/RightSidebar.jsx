@@ -1,54 +1,87 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Menu, Settings, Bell, HelpCircle, Moon, Edit3 } from 'lucide-react';
+import { moneyImg, userImg } from '../assets';
 
 const RightSidebar = () => {
+  const [isOpen, setIsOpen] = useState(true);
+
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
-    <aside className="bg-[#1F1572] text-white w-72 min-h-screen p-4 fixed right-0 top-0">
-      {/* User Profile */}
-      <div className="flex items-center mb-8">
-        <img
-          src="https://via.placeholder.com/50" // Replace with actual user profile image
-          alt="User Profile"
-          className="w-12 h-12 rounded-full mr-4"
-        />
-        <div>
-          <h3 className="text-lg font-semibold">Frank </h3>
-          <p className="text-sm text-gray-300">frank@gmail.com</p>
+    <>
+      <button onClick={toggleSidebar} className="text-white fixed top-4 right-4 z-50">
+        <Menu className="w-8 h-8" />
+      </button>
+      <aside className={`bg-gray-300 text-white w-72 min-h-screen p-4 fixed right-0 top-0 transform ${isOpen ? 'translate-x-0' : 'translate-x-full'} transition-transform duration-300 ease-in-out z-40`}>
+        {/* User Profile */}
+        <div className="flex items-center mb-8">
+          <img
+            src={moneyImg} // Replace with actual user profile image
+            alt="User Profile"
+            className="w-12 h-12 rounded-full mr-4"
+          />
+          <div>
+            <h3 className="text-lg text-[#0E0839] font-semibold">Nana</h3>
+            <p className="text-sm text-[#0E0839]">nana@gmail.com</p>
+            <button className="mt-2 text-sm text-blue-500 hover:underline flex items-center">
+              <Edit3 className="w-4 h-4 mr-1" /> Edit Profile
+            </button>
+          </div>
         </div>
-      </div>
 
-      {/* Card Information */}
-      <div className="bg-[#2C2172] p-4 rounded-lg mb-8">
-        <h4 className="text-sm font-semibold mb-2">Your cards</h4>
-        <div className="bg-[#3A2A9A] p-4 rounded-lg">
-          <p className="text-lg font-semibold">Visa</p>
-          <p className="text-sm">**** **** **** 1234</p>
-          <p className="text-lg font-semibold mt-2">$14,756.24</p>
+        {/* Quick Actions */}
+        <div className="mt-8">
+          <h4 className="text-sm text-[#0E0839] font-semibold mb-2">Quick Actions</h4>
+          <button className="bg-[#1F1572] text-white py-2 px-4 rounded w-full mb-4 flex items-center justify-between">
+            <span>Update Profile</span>
+            <Edit3 className="w-5 h-5" />
+          </button>
         </div>
-      </div>
 
-      {/* Amount Transfer */}
-      <div>
-        <h4 className="text-sm font-semibold mb-2">Amount Transfer</h4>
-        <div className="space-y-4">
-          <div className="bg-[#2C2172] p-4 rounded-lg flex items-center">
-            <span className="text-lg font-semibold">$12,000</span>
-            <span className="ml-auto text-sm text-gray-300">Transfer via Card</span>
-          </div>
-          <div className="bg-[#2C2172] p-4 rounded-lg flex items-center">
-            <span className="text-lg font-semibold">$4,000</span>
-            <span className="ml-auto text-sm text-gray-300">Transfer to Same Bank</span>
-          </div>
-          <div className="bg-[#2C2172] p-4 rounded-lg flex items-center">
-            <span className="text-lg font-semibold">$5,150</span>
-            <span className="ml-auto text-sm text-gray-300">Transfer via Wallet</span>
-          </div>
-          <div className="bg-[#2C2172] p-4 rounded-lg flex items-center">
-            <span className="text-lg font-semibold">$11,500</span>
-            <span className="ml-auto text-sm text-gray-300">Transfer to Other Bank</span>
-          </div>
+        {/* Notifications */}
+        <div className="mt-8">
+          <h4 className="text-sm text-[#0E0839] font-semibold mb-2">Notifications</h4>
+          <ul className="space-y-2">
+            <li className="bg-[#1F1572] p-3 rounded-lg flex items-center justify-between">
+              <span>Budget Exceeded</span>
+              <Bell className="w-5 h-5 text-white" />
+            </li>
+            <li className="bg-[#1F1572] p-3 rounded-lg flex items-center justify-between">
+              <span>New Update Available</span>
+              <Bell className="w-5 h-5 text-white" />
+            </li>
+          </ul>
         </div>
-      </div>
-    </aside>
+
+        {/* Settings */}
+        <div className="mt-8">
+          <h4 className="text-sm text-[#0E0839] font-semibold mb-2">Settings</h4>
+          <button className="bg-[#1F1572] text-white py-2 px-4 rounded w-full mb-4 flex items-center justify-between">
+            <span>Enable Dark Mode</span>
+            <Moon className="w-5 h-5" />
+          </button>
+          <button className="bg-[#1F1572] text-white py-2 px-4 rounded w-full flex items-center justify-between">
+            <span>Email Notifications</span>
+            <Settings className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Help and Support */}
+        <div className="mt-8">
+          <h4 className="text-sm text-[#0E0839] font-semibold mb-2">Help & Support</h4>
+          <button className="bg-[#1F1572] text-white py-2 px-4 rounded w-full flex items-center justify-between">
+            <span>FAQ</span>
+            <HelpCircle className="w-5 h-5" />
+          </button>
+          <button className="bg-red-500 text-white py-2 px-4 rounded w-full flex items-center justify-between mt-2">
+            <span>Contact Support</span>
+            <HelpCircle className="w-5 h-5" />
+          </button>
+        </div>
+      </aside>
+    </>
   );
 };
 

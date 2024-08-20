@@ -12,7 +12,7 @@ const FAQ = () => {
   };
 
   return (
-    <section className="flex items-center justify-between bg-gray-100 py-16 px-16">
+    <section className="flex items-center justify-between bg-white py-16 px-16">
       {/* FAQ Image */}
       <div className="w-1/2 pr-8">
         <img src={faqImg} alt="FAQ Image" className="rounded-lg shadow-lg" />

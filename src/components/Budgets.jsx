@@ -1,65 +1,39 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
+import { CategoriesContext } from '../context/CategoriesContext';
+import { BudgetsContext } from '../context/BudgetsContext';
 
 const Budgets = () => {
-  // Load budgets from localStorage or initialize with an empty array
-  const [budgets, setBudgets] = useState(() => {
-    const savedBudgets = localStorage.getItem('budgets');
-    return savedBudgets ? JSON.parse(savedBudgets) : [];
-  });
+  const { categories } = useContext(CategoriesContext);
+  const { budgets, setBudgets } = useContext(BudgetsContext);
 
-  // Load categories from localStorage to associate budgets with categories
-  const [categories, setCategories] = useState(() => {
-    const savedCategories = localStorage.getItem('categories');
-    return savedCategories ? JSON.parse(savedCategories) : ['Food', 'Transportation', 'Utilities', 'Entertainment', 'Miscellaneous'];
-  });
-
-  const [newCategory, setNewCategory] = useState('');
   const [newBudgetAmount, setNewBudgetAmount] = useState('');
   const [editMode, setEditMode] = useState(false);
-  const [editIndex, setEditIndex] = useState(null);
-
-  // Save budgets to localStorage whenever budgets state changes
-  useEffect(() => {
-    localStorage.setItem('budgets', JSON.stringify(budgets));
-  }, [budgets]);
+  const [editCategory, setEditCategory] = useState('');
 
   // Handle form submission for adding/editing a budget
   const handleAddBudget = (e) => {
     e.preventDefault();
 
-    if (editMode) {
-      // Edit existing budget
-      const updatedBudgets = budgets.map((budget, index) => 
-        index === editIndex ? { category: newCategory, amount: parseFloat(newBudgetAmount) } : budget
-      );
-      setBudgets(updatedBudgets);
-      setEditMode(false);
-      setEditIndex(null);
-    } else {
-      // Add new budget
-      const newBudget = {
-        category: newCategory,
-        amount: parseFloat(newBudgetAmount),
-      };
-      setBudgets([...budgets, newBudget]);
-    }
+    // Add or update budget for the selected category
+    setBudgets({ ...budgets, [editCategory]: parseFloat(newBudgetAmount) });
 
     // Clear form fields
-    setNewCategory('');
     setNewBudgetAmount('');
+    setEditMode(false);
+    setEditCategory('');
   };
 
   // Handle edit button click
-  const handleEditClick = (index) => {
+  const handleEditClick = (category) => {
     setEditMode(true);
-    setEditIndex(index);
-    setNewCategory(budgets[index].category);
-    setNewBudgetAmount(budgets[index].amount);
+    setEditCategory(category);
+    setNewBudgetAmount(budgets[category] || '');
   };
 
   // Handle delete button click
-  const handleDeleteClick = (index) => {
-    const updatedBudgets = budgets.filter((_, i) => i !== index);
+  const handleDeleteClick = (category) => {
+    const updatedBudgets = { ...budgets };
+    delete updatedBudgets[category];
     setBudgets(updatedBudgets);
   };
 
@@ -70,8 +44,8 @@ const Budgets = () => {
       {/* Form for adding/editing budgets */}
       <form className="mb-4" onSubmit={handleAddBudget}>
         <select
-          value={newCategory}
-          onChange={(e) => setNewCategory(e.target.value)}
+          value={editCategory}
+          onChange={(e) => setEditCategory(e.target.value)}
           className="mb-2 p-2 border rounded w-full"
           required
         >
@@ -97,20 +71,20 @@ const Budgets = () => {
 
       <div className="mb-4">
         <h3 className="text-lg font-semibold">Budgets</h3>
-        {budgets.map((budget, index) => (
-          <div key={index} className="p-2 bg-gray-100 rounded mb-2 flex justify-between items-center">
+        {Object.entries(budgets).map(([category, amount]) => (
+          <div key={category} className="p-2 bg-gray-100 rounded mb-2 flex justify-between items-center">
             <span>
-              {budget.category}: GHC {budget.amount.toFixed(2)}
+              {category}: GHC {(parseFloat(amount) || 0).toFixed(2)}
             </span>
             <div>
               <button 
-                onClick={() => handleEditClick(index)} 
+                onClick={() => handleEditClick(category)} 
                 className="text-blue-500 mr-2"
               >
                 Edit
               </button>
               <button 
-                onClick={() => handleDeleteClick(index)} 
+                onClick={() => handleDeleteClick(category)} 
                 className="text-red-500"
               >
                 Delete

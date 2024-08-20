@@ -1,89 +1,51 @@
-import React, { useState, useContext } from 'react';
-import { CategoriesContext } from '../context/CategoriesContext'; // Import the CategoriesContext
+import React, { useContext, useState } from 'react';
+import { CategoriesContext } from '../context/CategoriesContext.jsx';
+import { BudgetsContext } from '../context/BudgetsContext.jsx';
 
 const Categories = () => {
-  // Access categories and setCategories from the context
-  const { categories, setCategories } = useContext(CategoriesContext);
-
+  const { categories, addCategory } = useContext(CategoriesContext);
+  const { budgets } = useContext(BudgetsContext);
   const [newCategory, setNewCategory] = useState('');
-  const [editMode, setEditMode] = useState(false);
-  const [editIndex, setEditIndex] = useState(null);
 
-  // Handle form submission for adding/editing a category
   const handleAddCategory = (e) => {
     e.preventDefault();
+    if (newCategory.trim() === '') return;
 
-    if (editMode) {
-      // Edit existing category
-      const updatedCategories = categories.map((category, index) => 
-        index === editIndex ? newCategory : category
-      );
-      setCategories(updatedCategories);
-      setEditMode(false);
-      setEditIndex(null);
-    } else {
-      // Add new category
-      setCategories([...categories, newCategory]);
-    }
-
-    // Clear form field
+    addCategory(newCategory.trim());
     setNewCategory('');
-  };
-
-  // Handle edit button click
-  const handleEditClick = (index) => {
-    setEditMode(true);
-    setEditIndex(index);
-    setNewCategory(categories[index]);
-  };
-
-  // Handle delete button click
-  const handleDeleteClick = (index) => {
-    const updatedCategories = categories.filter((_, i) => i !== index);
-    setCategories(updatedCategories);
   };
 
   return (
     <div>
-      <h2 className="text-xl font-bold">Manage Categories</h2>
-
-      {/* Form for adding/editing categories */}
-      <form className="mb-4" onSubmit={handleAddCategory}>
-        <input
-          type="text"
-          placeholder="Category Name"
-          value={newCategory}
-          onChange={(e) => setNewCategory(e.target.value)}
-          className="mb-2 p-2 border rounded w-full"
-          required
-        />
-        <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded">
-          {editMode ? 'Update Category' : 'Add Category'}
-        </button>
-      </form>
-
+      <h2 className="text-xl font-bold">Categories & Budgets</h2>
       <div className="mb-4">
-        <h3 className="text-lg font-semibold">Categories</h3>
         {categories.map((category, index) => (
-          <div key={index} className="p-2 bg-gray-100 rounded mb-2 flex justify-between items-center">
-            <span>{category}</span>
-            <div>
-              <button 
-                onClick={() => handleEditClick(index)} 
-                className="text-blue-500 mr-2"
-              >
-                Edit
-              </button>
-              <button 
-                onClick={() => handleDeleteClick(index)} 
-                className="text-red-500"
-              >
-                Delete
-              </button>
+          <div key={index} className="p-4 bg-gray-100 rounded-lg mb-2 shadow-md">
+            <div className="flex justify-between">
+              <span className="font-semibold">{category}</span>
+              <span className="text-blue-600">
+                Budget: GHC {budgets[category]?.toFixed(2) || 0.00}
+              </span>
             </div>
           </div>
         ))}
       </div>
+      
+      <form onSubmit={handleAddCategory} className="mt-4">
+        <input
+          type="text"
+          value={newCategory}
+          onChange={(e) => setNewCategory(e.target.value)}
+          placeholder="New Category"
+          className="p-2 border rounded-md shadow-sm focus:ring focus:border-blue-300"
+        />
+        <button
+          type="submit"
+          className="ml-2 p-2 bg-blue-500 text-white rounded-md hover:bg-blue-700 transition"
+        >
+          Add Category
+        </button>
+      </form>
     </div>
   );
 };
